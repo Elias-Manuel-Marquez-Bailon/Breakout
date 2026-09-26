@@ -169,3 +169,7 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# Screenshots for the README: small files that must stay readable
+# outside of Git LFS, otherwise a repo ZIP download gives pointer files.
+Capturas/*.png -lfs
