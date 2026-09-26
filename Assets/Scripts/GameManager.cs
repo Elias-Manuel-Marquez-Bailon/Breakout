@@ -1,29 +1,51 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject pelotaPrefab;
-    [SerializeField] private Transform spawnPelota;
+    private static event Action<int> AlDestruirLadrillo;
+
+    [SerializeField] private TMP_Text textoPuntos;
 
     private int puntosJugador = 0;
 
-    void Start()
+    private void Start()
     {
-        CrearPelota();
+        if (textoPuntos == null)
+        {
+            textoPuntos = FindAnyObjectByType<TMP_Text>();
+        }
+
+        AlDestruirLadrillo += SumarPuntos;
+
+        ActualizarPuntos();
     }
 
-    private void CrearPelota()
+    private void OnDestroy()
     {
-        Instantiate(
-            pelotaPrefab,
-            spawnPelota.position,
-            Quaternion.identity
-        );
+        AlDestruirLadrillo -= SumarPuntos;
     }
 
-    private void puntosJugador() {
-        //Aqui digamos que cuando la pelota golpe a un cuadrito, este anote
-        //su puntuacion
+    public static void AnotarLadrillo(int puntos)
+    {
+        AlDestruirLadrillo?.Invoke(puntos);
     }
 
+    private void SumarPuntos(int puntos)
+    {
+        puntosJugador += puntos;
+
+        ActualizarPuntos();
+    }
+
+    private void ActualizarPuntos()
+    {
+        if (textoPuntos == null)
+        {
+            return;
+        }
+
+        textoPuntos.text = "Puntos: " + puntosJugador;
+    }
 }

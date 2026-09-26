@@ -8,6 +8,9 @@ public class JugadorMovimiento : MonoBehaviour
     [SerializeField] private Key teclaIzquierda ; //-1
     [SerializeField] private Key teclaDerecha; //1
 
+    [SerializeField] private float limiteIzquierdo = -7.4f;
+    [SerializeField] private float limiteDerecho = 7.4f;
+
     private Rigidbody2D rb;
 
     private float direccionHorizontal;
@@ -48,8 +51,10 @@ public class JugadorMovimiento : MonoBehaviour
             velocidad *
             Time.fixedDeltaTime;
 
-        rb.MovePosition(
-            rb.position + movimiento
-        );
+        Vector2 posicion = rb.position + movimiento;
+
+        posicion.x = Mathf.Clamp(posicion.x, limiteIzquierdo, limiteDerecho);
+
+        rb.MovePosition(posicion);
     }
 }
